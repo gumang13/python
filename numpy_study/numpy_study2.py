@@ -1,0 +1,47 @@
+
+import numpy as np
+
+# # 배열 자동 생성
+#
+# a = [ num for num in range(1,11) ]
+# print( a )
+#
+# # arange ( 시작, 끝, 증가값)
+# arr = np.arange( 10 )  # 배열 자동생성 : arange( 숫자 )
+# print( arr )
+#
+# arr = np.arange( 1, 16 ) # 1부터 15까지
+# arr2 = arr.reshape( 3,5)
+# # 차원 변경시 데이터 개수가 일치해야 한다.
+#
+# print( arr2 )
+#
+# arr3 = arr.reshape( -1, 5) # -1은 numpy가 알아서 계산 해 준다
+# print(arr3)
+#
+# dim1 = np.arange(24)
+# dim3 = dim1.reshape(3, -1, 2)
+# print( dim3 )
+# dim_origin = dim3.reshape(dim3.size)
+# print(dim_origin)
+#
+# # 0으로 채워진 배열 생성
+# zero_arr = np.zeros( ( 3, 3 ), dtype=int )
+# print("0으로 채우기 ",zero_arr)
+#
+# # 1로 채워진 배열 생성
+# one_arr = np.ones( (10), dtype=int)
+# print(one_arr)
+
+# 문제 2.
+# 11부터 22까지의 숫자 12개를 배열에 저장하기
+# 위에서 만든 배열을 2차원 배열 3행으로 만들기
+# 2차원 배열의 2행 전체의 총합 구하기
+# 2차원 배열 평균 구하기
+
+arr = np.arange(11,23)
+arr2 = arr.reshape((3,-1))
+print(arr2[1].sum())
+print(arr2.mean())
+
+
