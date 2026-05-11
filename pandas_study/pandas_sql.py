@@ -6,7 +6,7 @@ import pandas as pd
 # create_engine("mysql+pymsql://계정명:비번@주소:3306/DB명")
 
 eng = create_engine(
-    "mysql+pymysql://krkr:1234@localhost:3306/krkr"
+    "mysql+pymysql://gumang13:123456@localhost:3306/gumang13"
 )
 
 conn = eng.connect()
