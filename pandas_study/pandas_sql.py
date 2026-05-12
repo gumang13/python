@@ -44,3 +44,4 @@ mi = df[
     (df['item_qa']>=10)
 ]
 print(mi['item_name'].to_string(index=False))
+## 테스트
