@@ -1,54 +1,43 @@
 
 import cv2
+import numpy as np
 
-cap = cv2.VideoCapture("opencv_study/videos/motion_car.mp4")
+img = cv2.imread("opencv_study/images/fill.png")
 
-fps = cap.get(cv2.CAP_PROP_FPS)
-delay = int(1000/fps) 
-pre_frame = None
+img = cv2.resize(img,(640,480))
+hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
-while True:
-    ret , frame = cap.read()
-    if not ret :
-        continue
-    frame = cv2.resize(frame,(480,640))
-    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+lower_red1 = np.array( [ 0,100,100] )
+up_red1 = np.array([ 10,255,255 ]) 
+lower_red2 = np.array( [150,80,80] )
+up_red2 = np.array([179,255,255])
+lower_yellow = np.array([20,100,100])
+up_yellow = np.array([40,255,255])
+lower_green = np.array([100,100,100])
+up_green = np.array([130,255,255])
 
-    if pre_frame is None:
-        pre_frame=gray
-        continue
+mask1 = cv2.inRange(hsv,lower_red1,up_red1)
+mask2 = cv2.inRange(hsv,lower_red2,up_red2)
+mask3 = cv2.inRange(hsv,lower_yellow,up_yellow)
+mask4 = cv2.inRange(hsv,lower_green,up_green)
+mask = mask1 + mask2+ mask3 +mask4
 
-    diff = cv2.absdiff(pre_frame,gray)
+kernel= np.ones((5,5),np.uint8)
 
-    _,thresh = cv2.threshold(
-        diff,80,255,cv2.THRESH_BINARY
+mask = cv2.morphologyEx(
+    mask , cv2.MORPH_OPEN ,kernel,iterations=1
+)
+mask = cv2.morphologyEx( mask,cv2.MORPH_CLOSE,kernel,iterations=2)
+copy_img=img.copy()
+contours,_= cv2.findContours(
+    mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE
+)
+for cnt in contours:
+    x,y,w,h = cv2.boundingRect(cnt)
+    cv2.rectangle(
+        copy_img,(x,y),(x+w,y+h),(0,255,0),2
     )
-
-    thresh = cv2.dilate( thresh , None , iterations=2)
-
-    contours,_ = cv2.findContours(
-        thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE
-    )
-
-    result=frame.copy()
-    for con in contours:
-        x,y,w,h=cv2.boundingRect(con)
-        cv2.rectangle(
-            result,
-            (x,y),
-            (x+w,y+h),
-            (0,0,255),
-            2
-        )
-    cv2.imshow("result",result)
-    cv2.imshow("diff",diff)
-    cv2.imshow("frame",frame)
-    if cv2.waitKey(33)==27:
-        break
-    pre_frame=gray
-cap.releas()
+cv2.imshow("img",img)
+cv2.imshow("result",copy_img)
+cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-
-
-    
