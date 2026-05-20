@@ -13,7 +13,7 @@ conn = eng.connect()
 print("연결 성공")
 conn.close()
 
-query = "select * from item"
+query = "select * from student"
 df = pd.read_sql(query, eng)
 print(df)
 
